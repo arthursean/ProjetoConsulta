@@ -2,7 +2,25 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <time.h>
+
+int feriado(int dia, int mes, int ano)
+{
+    char texto[10];
+    int x = 0;
+    sprintf(texto, "%d", ano);
+    FILE *fp;
+    fp = fopen(strcat(texto, ".txt"), "r");
+    int diaF, mesF;
+    while (fscanf(fp, "%d/%d", &diaF, &mesF) != EOF)
+    {
+        if (dia == diaF && mes == mesF)
+        {
+            return 1;
+        }
+    }
+    fclose(fp);
+    return 0;
+}
 int diaDaSemana(int d, int m, int y)
 {
     return (d += m < 3 ? y-- : y - 2, 23 * m / 9 + d + 4 + y / 4 - y / 100 + y / 400) % 7;
@@ -114,6 +132,11 @@ int validar(int dia, int mes, int ano)
     {
         return 0;
     }
+    if (feriado(dia, mes, ano))
+    {
+        return 0;
+    }
+    return 1;
 }
 int main()
 {
@@ -134,11 +157,11 @@ int main()
             break;
         }
         printf("Data inválida!\n");
-        // sleep(2);
-        // system("clear");
+        sleep(2);
+        system("clear");
     }
-    // system("clear");
-    printf("Consulta marcada para %d/%d/%d\n", dia, mes, ano);
-    // sleep(2);
-    // system("clear");
+    system("clear");
+    printf("Consulta marcada para %02d/%02d/%d\n", dia, mes, ano);
+    sleep(2);
+    system("clear");
 }
