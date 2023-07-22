@@ -3,54 +3,40 @@
 #include <string.h>
 #include <unistd.h>
 
-int feriado(int dia, int mes, int ano)
+int ehFeriado(int dia, int mes, int ano)
 {
-    char texto[10];
-    int x = 0;
-    sprintf(texto, "%d", ano);
-    FILE *fp;
-    fp = fopen(strcat(texto, ".txt"), "r");
-    int diaF, mesF;
-    while (fscanf(fp, "%d/%d", &diaF, &mesF) != EOF)
+    if (ano == 2023 || ano == 2024)
     {
-        if (dia == diaF && mes == mesF)
+        char texto[10];
+        int x = 0;
+        sprintf(texto, "%d", ano);
+        FILE *fp;
+        fp = fopen(strcat(texto, ".txt"), "r");
+        int diaF, mesF;
+        while (fscanf(fp, "%d/%d", &diaF, &mesF) != EOF)
         {
-            return 1;
+            if (dia == diaF && mes == mesF)
+            {
+                return 1;
+            }
         }
+        fclose(fp);
     }
-    fclose(fp);
     return 0;
 }
-int diaDaSemana(int d, int m, int y)
+int retornaDiaDaSemana(int d, int m, int y)
 {
     return (d += m < 3 ? y-- : y - 2, 23 * m / 9 + d + 4 + y / 4 - y / 100 + y / 400) % 7;
 }
-int bissexto(int ano)
+int ehBissexto(int ano)
 {
-    if (ano % 400 == 0)
-    {
-        return 29;
-    }
-    else if (ano % 100 != 0 && ano % 4 == 0)
-    {
-        return 29;
-    }
-    return 28;
+    return ano % 400 == 0 || (ano % 100 != 0 && ano % 4 == 0) ? 29 : 28;
 }
-int diaDoMes(int dia, int mes, int ano)
+int retornaDiaDoMes(int dia, int mes, int ano)
 {
-    if (dia > 30 && (mes == 4 || mes == 6 || mes == 9 || mes == 11))
-    {
-        return 0;
-    }
-    else if (mes == 2 && dia > bissexto(ano))
-    {
-        return 0;
-    }
-    else if (dia > 31)
-    {
-        return 0;
-    }
+    return (dia > 30 && (mes == 4 || mes == 6 || mes == 9 || mes == 11)) ? 1 : mes == 2 && dia > ehBissexto(ano) ? 1
+                                                                           : dia > 31                            ? 1
+                                                                                                                 : 0;
 }
 int mesInt(char mes[])
 {
@@ -79,7 +65,7 @@ int mesInt(char mes[])
     if (!strcmp("Dec", mes))
         return 12;
 }
-void atual(int *diaAtual, int *mesAtual, int *anoAtual)
+void retornaDiaAtual(int *diaAtual, int *mesAtual, int *anoAtual)
 {
     const char aa[] = __DATE__;
     char mes[4];
@@ -105,38 +91,17 @@ void atual(int *diaAtual, int *mesAtual, int *anoAtual)
     *mesAtual = mesInt(mes);
     *anoAtual = atoi(ano);
 }
-
-int validar(int dia, int mes, int ano)
+int validarData(int dia, int mes, int ano)
 {
     int anoAtual;
     int diaAtual;
     int mesAtual;
-    atual(&diaAtual, &mesAtual, &anoAtual);
+    retornaDiaAtual(&diaAtual, &mesAtual, &anoAtual);
     if (anoAtual > ano || (dia <= diaAtual && mes <= mesAtual && anoAtual >= ano) || (mes < mesAtual && ano <= anoAtual))
     {
-        return 0;
+        return 1;
     }
-    if (!diaDoMes(dia, mes, ano))
-    {
-        return 0;
-    }
-    if (dia < 1)
-    {
-        return 0;
-    }
-    if (mes < 1 || mes > 12)
-    {
-        return 0;
-    }
-    if (diaDaSemana(dia, mes, ano) == 6 || diaDaSemana(dia, mes, ano) == 0)
-    {
-        return 0;
-    }
-    if (feriado(dia, mes, ano))
-    {
-        return 0;
-    }
-    return 1;
+    return (retornaDiaDoMes(dia, mes, ano)) || (dia < 1) || (mes < 1 || mes > 12) || (retornaDiaDaSemana(dia, mes, ano) == 6 || retornaDiaDaSemana(dia, mes, ano) == 0) || ehFeriado(dia, mes, ano);
 }
 int main()
 {
@@ -150,7 +115,7 @@ int main()
         scanf("%d", &mes);
         printf("Ano: ");
         scanf("%d", &ano);
-        if (validar(dia, mes, ano))
+        if (!validarData(dia, mes, ano))
         {
             printf("\n");
             flag = 1;
