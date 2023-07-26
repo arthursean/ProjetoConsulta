@@ -34,9 +34,7 @@ int ehBissexto(int ano)
 }
 int retornaDiaDoMes(int dia, int mes, int ano)
 {
-    return (dia > 30 && (mes == 4 || mes == 6 || mes == 9 || mes == 11)) ? 1 : mes == 2 && dia > ehBissexto(ano) ? 1
-                                                                           : dia > 31                            ? 1
-                                                                                                                 : 0;
+    return (dia > 30 && (mes == 4 || mes == 6 || mes == 9 || mes == 11)) || mes == 2 && dia > ehBissexto(ano) || dia > 31;
 }
 int mesInt(char mes[])
 {
