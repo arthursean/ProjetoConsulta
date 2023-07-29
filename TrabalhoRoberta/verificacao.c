@@ -101,10 +101,57 @@ int validarData(int dia, int mes, int ano)
     }
     return (retornaDiaDoMes(dia, mes, ano)) || (dia < 1) || (mes < 1 || mes > 12) || (retornaDiaDaSemana(dia, mes, ano) == 6 || retornaDiaDaSemana(dia, mes, ano) == 0) || ehFeriado(dia, mes, ano);
 }
+
+int validarCpf(char cpf[])
+{
+    int sum = 0;
+    int verificador1 = cpf[9] - '0';
+    int verificador2 = cpf[10] - '0';
+    int condicao;
+    for (int i = 0; i < 9; i++)
+    {
+        int temp = cpf[i] - '0';
+        sum += temp * (10 - i);
+    }
+    condicao = 11 - (sum % 11);
+    if (((verificador1 != condicao) && verificador1 != 0) || verificador1 == 0 && condicao < 10)
+    {
+        return 0;
+    }
+    sum = 0;
+    for (int i = 0; i < 10; i++)
+    {
+        int temp = cpf[i] - '0';
+        sum += temp * (11 - i);
+    }
+    condicao = 11 - (sum % 11);
+    if (((verificador2 != condicao) && verificador2 != 0) || verificador2 == 0 && condicao < 10)
+    {
+        return 0;
+    }
+    return 1;
+}
 int main()
 {
     int dia, mes, ano;
     int flag = 0;
+    char cpf[12];
+    printf("Digite o seu nome e seu CPF\n");
+    while (flag == 0)
+    {
+        scanf("%s", cpf);
+        if (validarCpf(cpf))
+        {
+            flag = 1;
+            printf("CPF cadastrado com sucesso!\n");
+            break;
+        }
+        printf("Seu CPF é inválido, digite novamente!\n");
+    }
+    sleep(1);
+    system("clear");
+    flag = 0;
+    printf("Agora escolha a data de sua consulta\n");
     while (flag == 0)
     {
         printf("Dia: ");
