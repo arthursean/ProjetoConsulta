@@ -131,18 +131,57 @@ int validarCpf(char cpf[])
     }
     return 1;
 }
+int escolhaData(int *dia, int *mes, int *ano)
+{
+    while (1)
+    {
+        printf("Dia: ");
+        scanf("%d", &*dia);
+        printf("Mes: ");
+        scanf("%d", &*mes);
+        printf("Ano: ");
+        scanf("%d", &*ano);
+        if (ehFeriado(*dia, *mes, *ano))
+        {
+            *dia += 1;
+            if ((*dia > 30 && (*mes == 4 || *mes == 6 || *mes == 9 || *mes == 11)) || *mes == 2 && *dia > ehBissexto(*ano) || *dia > 31)
+            {
+                *dia = 1;
+                if (*mes == 12)
+                {
+                    *mes = 1;
+                    *ano += 1;
+                }
+                else
+                {
+                    *mes += 1;
+                }
+            }
+        }
+        if (!validarData(*dia, *mes, *ano))
+        {
+            printf("\n");
+            return 0;
+        }
+        printf("Data inválida!\n");
+        sleep(2);
+        system("clear");
+    }
+    return 1;
+}
 int main()
 {
     int dia, mes, ano;
-    int flag = 0;
+    char nome[50];
     char cpf[12];
-    printf("Digite o seu nome e seu CPF\n");
-    while (flag == 0)
+    printf("Digite o seu primeiro nome e seu CPF\n");
+    scanf("%s", nome);
+    getchar();
+    while (1)
     {
         scanf("%s", cpf);
         if (validarCpf(cpf))
         {
-            flag = 1;
             printf("CPF cadastrado com sucesso!\n");
             break;
         }
@@ -150,28 +189,10 @@ int main()
     }
     sleep(1);
     system("clear");
-    flag = 0;
     printf("Agora escolha a data de sua consulta\n");
-    while (flag == 0)
-    {
-        printf("Dia: ");
-        scanf("%d", &dia);
-        printf("Mes: ");
-        scanf("%d", &mes);
-        printf("Ano: ");
-        scanf("%d", &ano);
-        if (!validarData(dia, mes, ano))
-        {
-            printf("\n");
-            flag = 1;
-            break;
-        }
-        printf("Data inválida!\n");
-        sleep(2);
-        system("clear");
-    }
+    escolhaData(&dia, &mes, &ano);
     system("clear");
-    printf("Consulta marcada para %02d/%02d/%d\n", dia, mes, ano);
+    printf("Sr. %s sua consulta está marcada para %02d/%02d/%d\n", nome, dia, mes, ano);
     sleep(2);
     system("clear");
 }
