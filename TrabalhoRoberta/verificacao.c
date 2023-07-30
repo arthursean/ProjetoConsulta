@@ -141,6 +141,48 @@ int escolhaData(int *dia, int *mes, int *ano)
         scanf("%d", &*mes);
         printf("Ano: ");
         scanf("%d", &*ano);
+        if (ehFeriado(*dia, *mes, *ano))
+        {
+            if ((*dia > 30 && (*mes == 4 || *mes == 6 || *mes == 9 || *mes == 11)) || *mes == 2 && *dia > ehBissexto(*ano) || *dia > 31)
+            {
+                *dia = 1;
+                if (*mes == 12)
+                {
+                    *mes = 1;
+                    *ano += 1;
+                }
+                else
+                {
+                    *mes += 1;
+                }
+            }
+            else
+            {
+                *dia += 1;
+            }
+            while (validarData(*dia, *mes, *ano))
+            {
+
+                if ((*dia > 30 && (*mes == 4 || *mes == 6 || *mes == 9 || *mes == 11)) || *mes == 2 && *dia > ehBissexto(*ano) || *dia > 31)
+                {
+                    *dia = 1;
+                    if (*mes == 12)
+                    {
+                        *mes = 1;
+                        *ano += 1;
+                    }
+                    else
+                    {
+                        *mes += 1;
+                    }
+                }
+                else
+                {
+                    *dia += 1;
+                }
+            }
+            return 0;
+        }
         if (!validarData(*dia, *mes, *ano))
         {
             printf("\n");
@@ -152,14 +194,15 @@ int escolhaData(int *dia, int *mes, int *ano)
     }
     return 1;
 }
-int main()
+void programaPaciente()
 {
     int dia, mes, ano;
     char nome[50];
     char cpf[12];
-    printf("Digite o seu primeiro nome e seu CPF\n");
+    printf("Digite o seu primeiro nome: ");
     scanf("%s", nome);
     getchar();
+    printf("Digite seu CPF: ");
     while (1)
     {
         scanf("%s", cpf);
@@ -178,4 +221,30 @@ int main()
     printf("Sr. %s sua consulta está marcada para %02d/%02d/%d\n", nome, dia, mes, ano);
     sleep(2);
     system("clear");
+}
+int main()
+{
+    int escolha;
+    printf("Bem vindo à clínica Boa Estética!\n");
+    printf("Você gostaria de:\n1 - Marcar consulta\n2 - Cadastrar como médico\n3 - Sair\n");
+    scanf("%d", &escolha);
+    system("clear");
+    getchar();
+    if (escolha == 1)
+    {
+        programaPaciente();
+    }
+    else if (escolha == 2)
+    {
+        // programaMedico();
+    }
+    else if (escolha == 3)
+    {
+        printf("Obrigado por utilizar nosso programa!\n");
+        return 0;
+    }
+    else
+    {
+        main();
+    }
 }
