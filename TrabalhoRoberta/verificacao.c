@@ -141,23 +141,6 @@ int escolhaData(int *dia, int *mes, int *ano)
         scanf("%d", &*mes);
         printf("Ano: ");
         scanf("%d", &*ano);
-        if (ehFeriado(*dia, *mes, *ano))
-        {
-            *dia += 1;
-            if ((*dia > 30 && (*mes == 4 || *mes == 6 || *mes == 9 || *mes == 11)) || *mes == 2 && *dia > ehBissexto(*ano) || *dia > 31)
-            {
-                *dia = 1;
-                if (*mes == 12)
-                {
-                    *mes = 1;
-                    *ano += 1;
-                }
-                else
-                {
-                    *mes += 1;
-                }
-            }
-        }
         if (!validarData(*dia, *mes, *ano))
         {
             printf("\n");
