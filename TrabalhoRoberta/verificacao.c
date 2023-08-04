@@ -215,8 +215,25 @@ void programaPaciente()
     }
     sleep(1);
     system("clear");
+    printf("Olá, Sr(a). %s. Você gostaria de realizar qual procedimento?\n", nome);
+    int escolha;
+    int flag = 0;
+    while (flag == 0)
+    {
+        printf("1 - Tratamento de Acne\n2 - Tratamento para Hipertrofia\n3 - Tratamento de Queloides\n4 - Tratamento de Micoses\n");
+        printf("5 - Tratamento de Varizes\n6 - Consulta\n");
+        scanf("%d", &escolha);
+        flag = 1;
+        if (escolha < 1 || escolha > 6)
+        {
+            flag = 0;
+            printf("Opção inválida!\n");
+        }
+        sleep(1);
+        system("clear");
+    }
     printf("Agora escolha a data de sua consulta\n");
-    escolhaData(&dia, &mes, &ano);
+    escolhaData(&dia, &mes, &ano); // TODO: COLOCAR A DOENÇA NA ESCOLHA DA DATA E LINKAR COM OS MÉDICOS
     system("clear");
     printf("Sr. %s sua consulta está marcada para %02d/%02d/%d\n", nome, dia, mes, ano);
     sleep(2);
