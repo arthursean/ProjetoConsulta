@@ -91,7 +91,7 @@ void retornaDiaAtual(int *diaAtual, int *mesAtual, int *anoAtual)
     *mesAtual = mesInt(mes);
     *anoAtual = atoi(ano);
 }
-int validarData(int dia, int mes, int ano, int escolha, int hora, int min)
+int validarData(int dia, int mes, int ano, int escolha, int hora, int min, char nome[])
 {
     int anoAtual;
     int diaAtual;
@@ -101,7 +101,7 @@ int validarData(int dia, int mes, int ano, int escolha, int hora, int min)
     {
         return 1;
     }
-    return (retornaDiaDoMes(dia, mes, ano)) || (dia < 1) || (mes < 1 || mes > 12) || (retornaDiaDaSemana(dia, mes, ano) == 6 || retornaDiaDaSemana(dia, mes, ano) == 0) || ehFeriado(dia, mes, ano) || verificaDisponibilidade(dia, mes, ano, escolha, hora, min);
+    return (retornaDiaDoMes(dia, mes, ano)) || (dia < 1) || (mes < 1 || mes > 12) || (retornaDiaDaSemana(dia, mes, ano) == 6 || retornaDiaDaSemana(dia, mes, ano) == 0) || ehFeriado(dia, mes, ano) || verificaDisponibilidade(dia, mes, ano, escolha, hora, min, nome);
 }
 
 int validarCpf(char cpf[])
@@ -133,7 +133,7 @@ int validarCpf(char cpf[])
     }
     return 1;
 }
-int escolhaData(int *dia, int *mes, int *ano, int escolha)
+int escolhaData(int *dia, int *mes, int *ano, int escolha, char nome[])
 {
     int hora, min;
     while (1)
@@ -221,7 +221,7 @@ int escolhaData(int *dia, int *mes, int *ano, int escolha)
             {
                 *dia += 1;
             }
-            while (validarData(*dia, *mes, *ano, escolha, hora, min))
+            while (validarData(*dia, *mes, *ano, escolha, hora, min, nome))
             {
 
                 if ((*dia > 30 && (*mes == 4 || *mes == 6 || *mes == 9 || *mes == 11)) || *mes == 2 && *dia > ehBissexto(*ano) || *dia > 31)
@@ -244,7 +244,7 @@ int escolhaData(int *dia, int *mes, int *ano, int escolha)
             }
             return 0;
         }
-        if (!validarData(*dia, *mes, *ano, escolha, hora, min))
+        if (!validarData(*dia, *mes, *ano, escolha, hora, min, nome))
         {
             printf("\n");
             return 0;
@@ -294,7 +294,7 @@ void programaPaciente()
         system("clear");
     }
     printf("Agora escolha a data de sua consulta\n");
-    escolhaData(&dia, &mes, &ano, escolha); // TODO: COLOCAR A DOENÇA NA ESCOLHA DA DATA E LINKAR COM OS MÉDICOS
+    escolhaData(&dia, &mes, &ano, escolha, nome); // TODO: COLOCAR A DOENÇA NA ESCOLHA DA DATA E LINKAR COM OS MÉDICOS
     system("clear");
     printf("Sr. %s sua consulta está marcada para %02d/%02d/%d\n", nome, dia, mes, ano);
     sleep(2);

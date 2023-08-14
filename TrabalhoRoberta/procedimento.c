@@ -54,7 +54,7 @@ void selecionaProcedimentosDoMedico(int escolha, char *nome)
 
     return;
 }
-int verificaDisponibilidade(int dia, int mes, int ano, int escolha, int hora, int minuto)
+int verificaDisponibilidade(int dia, int mes, int ano, int escolha, int hora, int minuto, char nome[])
 {
     switch (escolha)
     {
@@ -66,9 +66,12 @@ int verificaDisponibilidade(int dia, int mes, int ano, int escolha, int hora, in
                 .tempoMinimoEntreAplicacoes = 15,
                 .tempoMaximoEntreAplicacoes = 30,
                 .duracaoProcedimento = 10};
-        FILE *fp = fopen("09428867470.txt", "r");
+        char name[18];
+        FILE *file = fopen("Espinha.txt", "r");
+        fscanf(file, "%s", name);
+        FILE *fp = fopen(strcat(name, ".txt"), "r");
         int diaAux, mesAux, anoAux, horaInicio, minInicio, horaFinal, minFinal;
-        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
         while (!feof(fp))
         {
             if (diaAux == dia && mesAux == mes && anoAux == ano && (horaInicio == hora && minInicio <= minuto && minFinal > minuto))
@@ -77,10 +80,10 @@ int verificaDisponibilidade(int dia, int mes, int ano, int escolha, int hora, in
             }
             else
             {
-                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
             }
         }
-        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
         if (diaAux == dia && mesAux == mes && anoAux == ano && (horaInicio == hora && minInicio <= minuto && minFinal > minuto))
         {
             return 1;
@@ -88,8 +91,8 @@ int verificaDisponibilidade(int dia, int mes, int ano, int escolha, int hora, in
         else
         {
             fclose(fp);
-            fp = fopen("09428867470.txt", "a");
-            fprintf(fp, "\n%d/%d/%d-%d:%d-%d:%d", dia, mes, ano, hora, minuto, hora, minuto + espinha.duracaoProcedimento);
+            fp = fopen(name, "a");
+            fprintf(fp, "\n%d/%d/%d-%d:%d-%d:%d %s %s", dia, mes, ano, hora, minuto, hora, minuto + espinha.duracaoProcedimento, nome, espinha.nomeDoProcedimento);
             return 0;
         }
         break;
