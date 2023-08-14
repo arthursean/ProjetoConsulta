@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 
+void programaMedico();
 int ehFeriado(int dia, int mes, int ano)
 {
     if (ano == 2023 || ano == 2024)
@@ -253,7 +254,7 @@ int main()
     }
     else if (escolha == 2)
     {
-        // programaMedico();
+        programaMedico();
     }
     else if (escolha == 3)
     {
