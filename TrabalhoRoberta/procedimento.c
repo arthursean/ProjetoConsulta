@@ -54,7 +54,7 @@ void selecionaProcedimentosDoMedico(int escolha, char *nome)
 
     return;
 }
-void verificaDisponibilidade(int dia, int mes, int ano, int escolha)
+int verificaDisponibilidade(int dia, int mes, int ano, int escolha, int hora, int minuto)
 {
     switch (escolha)
     {
@@ -66,6 +66,32 @@ void verificaDisponibilidade(int dia, int mes, int ano, int escolha)
                 .tempoMinimoEntreAplicacoes = 15,
                 .tempoMaximoEntreAplicacoes = 30,
                 .duracaoProcedimento = 10};
+        FILE *fp = fopen("09428867470.txt", "r");
+        int diaAux, mesAux, anoAux, horaInicio, minInicio, horaFinal, minFinal;
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        while (!feof(fp))
+        {
+            if (diaAux == dia && mesAux == mes && anoAux == ano && (horaInicio == hora && minInicio <= minuto && minFinal > minuto))
+            {
+                return 1;
+            }
+            else
+            {
+                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+            }
+        }
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        if (diaAux == dia && mesAux == mes && anoAux == ano && (horaInicio == hora && minInicio <= minuto && minFinal > minuto))
+        {
+            return 1;
+        }
+        else
+        {
+            fclose(fp);
+            fp = fopen("09428867470.txt", "a");
+            fprintf(fp, "\n%d/%d/%d-%d:%d-%d:%d", dia, mes, ano, hora, minuto, hora, minuto + espinha.duracaoProcedimento);
+            return 0;
+        }
         break;
     case 2:
         Procedimento hipertrofias = {
@@ -74,6 +100,31 @@ void verificaDisponibilidade(int dia, int mes, int ano, int escolha)
             .tempoMinimoEntreAplicacoes = 20,
             .tempoMaximoEntreAplicacoes = 25,
             .duracaoProcedimento = 30};
+        fp = fopen("09428867470.txt", "r");
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        while (!feof(fp))
+        {
+            if (diaAux == dia && mesAux == mes && anoAux == ano)
+            {
+                return 1;
+            }
+            else
+            {
+                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+            }
+        }
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        if (diaAux == dia && mesAux == mes && anoAux == ano)
+        {
+            return 1;
+        }
+        else
+        {
+            fclose(fp);
+            fp = fopen("09428867470.txt", "a");
+            fprintf(fp, "\n%d/%d/%d", dia, mes, ano);
+            return 0;
+        }
         break;
     case 3:
         Procedimento queloides =
@@ -83,6 +134,31 @@ void verificaDisponibilidade(int dia, int mes, int ano, int escolha)
                 .tempoMinimoEntreAplicacoes = 10,
                 .tempoMaximoEntreAplicacoes = 15,
                 .duracaoProcedimento = 20};
+        fp = fopen("09428867470.txt", "r");
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        while (!feof(fp))
+        {
+            if (diaAux == dia && mesAux == mes && anoAux == ano)
+            {
+                return 1;
+            }
+            else
+            {
+                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+            }
+        }
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        if (diaAux == dia && mesAux == mes && anoAux == ano)
+        {
+            return 1;
+        }
+        else
+        {
+            fclose(fp);
+            fp = fopen("09428867470.txt", "a");
+            fprintf(fp, "\n%d/%d/%d", dia, mes, ano);
+            return 0;
+        }
         break;
     case 4:
         Procedimento micose =
@@ -92,6 +168,31 @@ void verificaDisponibilidade(int dia, int mes, int ano, int escolha)
                 .tempoMinimoEntreAplicacoes = 3,
                 .tempoMaximoEntreAplicacoes = 5,
                 .duracaoProcedimento = 10};
+        fp = fopen("09428867470.txt", "r");
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        while (!feof(fp))
+        {
+            if (diaAux == dia && mesAux == mes && anoAux == ano)
+            {
+                return 1;
+            }
+            else
+            {
+                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+            }
+        }
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        if (diaAux == dia && mesAux == mes && anoAux == ano)
+        {
+            return 1;
+        }
+        else
+        {
+            fclose(fp);
+            fp = fopen("09428867470.txt", "a");
+            fprintf(fp, "\n%d/%d/%d", dia, mes, ano);
+            return 0;
+        }
         break;
     case 5:
         Procedimento varizes =
@@ -101,6 +202,31 @@ void verificaDisponibilidade(int dia, int mes, int ano, int escolha)
                 .tempoMinimoEntreAplicacoes = 7,
                 .tempoMaximoEntreAplicacoes = 11,
                 .duracaoProcedimento = 40};
+        fp = fopen("09428867470.txt", "r");
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        while (!feof(fp))
+        {
+            if (diaAux == dia && mesAux == mes && anoAux == ano)
+            {
+                return 1;
+            }
+            else
+            {
+                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+            }
+        }
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        if (diaAux == dia && mesAux == mes && anoAux == ano)
+        {
+            return 1;
+        }
+        else
+        {
+            fclose(fp);
+            fp = fopen("09428867470.txt", "a");
+            fprintf(fp, "\n%d/%d/%d", dia, mes, ano);
+            return 0;
+        }
         break;
     case 6:
         Procedimento consulta =
@@ -110,9 +236,34 @@ void verificaDisponibilidade(int dia, int mes, int ano, int escolha)
                 .tempoMinimoEntreAplicacoes = 32,
                 .tempoMaximoEntreAplicacoes = 186,
                 .duracaoProcedimento = 60};
+        fp = fopen("09428867470.txt", "r");
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        while (!feof(fp))
+        {
+            if (diaAux == dia && mesAux == mes && anoAux == ano)
+            {
+                return 1;
+            }
+            else
+            {
+                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+            }
+        }
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        if (diaAux == dia && mesAux == mes && anoAux == ano)
+        {
+            return 1;
+        }
+        else
+        {
+            fclose(fp);
+            fp = fopen("09428867470.txt", "a");
+            fprintf(fp, "\n%d/%d/%d", dia, mes, ano);
+            return 0;
+        }
         break;
     default:
         printf("Inválido\n");
-        return;
     }
+    return 0;
 }

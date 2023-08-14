@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 void programaMedico();
+int verificaDisponibilidade();
 int ehFeriado(int dia, int mes, int ano)
 {
     if (ano == 2023 || ano == 2024)
@@ -90,7 +91,7 @@ void retornaDiaAtual(int *diaAtual, int *mesAtual, int *anoAtual)
     *mesAtual = mesInt(mes);
     *anoAtual = atoi(ano);
 }
-int validarData(int dia, int mes, int ano)
+int validarData(int dia, int mes, int ano, int escolha, int hora, int min)
 {
     int anoAtual;
     int diaAtual;
@@ -100,7 +101,7 @@ int validarData(int dia, int mes, int ano)
     {
         return 1;
     }
-    return (retornaDiaDoMes(dia, mes, ano)) || (dia < 1) || (mes < 1 || mes > 12) || (retornaDiaDaSemana(dia, mes, ano) == 6 || retornaDiaDaSemana(dia, mes, ano) == 0) || ehFeriado(dia, mes, ano);
+    return (retornaDiaDoMes(dia, mes, ano)) || (dia < 1) || (mes < 1 || mes > 12) || (retornaDiaDaSemana(dia, mes, ano) == 6 || retornaDiaDaSemana(dia, mes, ano) == 0) || ehFeriado(dia, mes, ano) || verificaDisponibilidade(dia, mes, ano, escolha, hora, min);
 }
 
 int validarCpf(char cpf[])
@@ -132,8 +133,9 @@ int validarCpf(char cpf[])
     }
     return 1;
 }
-int escolhaData(int *dia, int *mes, int *ano)
+int escolhaData(int *dia, int *mes, int *ano, int escolha)
 {
+    int hora, min;
     while (1)
     {
         printf("Dia: ");
@@ -142,6 +144,64 @@ int escolhaData(int *dia, int *mes, int *ano)
         scanf("%d", &*mes);
         printf("Ano: ");
         scanf("%d", &*ano);
+        printf("Nós trabalhamos das 8h às 16h\n");
+        printf("Escolha a hora que você ser atendido: ");
+        int choice;
+        hora = 0;
+        while (hora == 0)
+        {
+            printf("\n1 - 8h\n2 - 9h\n3 - 10h\n4 - 11h\n5 - 12h\n6 - 13h\n7 - 14h\n8 - 15h\n");
+            scanf("%d", &choice);
+            switch (choice)
+            {
+            case 1:
+                hora = 8;
+                break;
+            case 2:
+                hora = 9;
+                break;
+            case 3:
+                hora = 10;
+                break;
+            case 4:
+                hora = 11;
+                break;
+            case 5:
+                hora = 12;
+                break;
+            case 6:
+                hora = 13;
+                break;
+            case 7:
+                hora = 14;
+                break;
+            case 8:
+                hora = 15;
+                break;
+            default:
+                hora = 0;
+                printf("Valor inválido!\n");
+                break;
+            }
+        }
+        min = 5;
+        while (min == 5)
+        {
+            printf("1 - %d:00\n2 - %d:30\n", hora, hora);
+            scanf("%d", &choice);
+            switch (choice)
+            {
+            case 1:
+                min = 0;
+                break;
+            case 2:
+                min = 30;
+                break;
+            default:
+                min = 5;
+                break;
+            }
+        }
         if (ehFeriado(*dia, *mes, *ano))
         {
             if ((*dia > 30 && (*mes == 4 || *mes == 6 || *mes == 9 || *mes == 11)) || *mes == 2 && *dia > ehBissexto(*ano) || *dia > 31)
@@ -161,7 +221,7 @@ int escolhaData(int *dia, int *mes, int *ano)
             {
                 *dia += 1;
             }
-            while (validarData(*dia, *mes, *ano))
+            while (validarData(*dia, *mes, *ano, escolha, hora, min))
             {
 
                 if ((*dia > 30 && (*mes == 4 || *mes == 6 || *mes == 9 || *mes == 11)) || *mes == 2 && *dia > ehBissexto(*ano) || *dia > 31)
@@ -184,7 +244,7 @@ int escolhaData(int *dia, int *mes, int *ano)
             }
             return 0;
         }
-        if (!validarData(*dia, *mes, *ano))
+        if (!validarData(*dia, *mes, *ano, escolha, hora, min))
         {
             printf("\n");
             return 0;
@@ -234,7 +294,7 @@ void programaPaciente()
         system("clear");
     }
     printf("Agora escolha a data de sua consulta\n");
-    escolhaData(&dia, &mes, &ano); // TODO: COLOCAR A DOENÇA NA ESCOLHA DA DATA E LINKAR COM OS MÉDICOS
+    escolhaData(&dia, &mes, &ano, escolha); // TODO: COLOCAR A DOENÇA NA ESCOLHA DA DATA E LINKAR COM OS MÉDICOS
     system("clear");
     printf("Sr. %s sua consulta está marcada para %02d/%02d/%d\n", nome, dia, mes, ano);
     sleep(2);
