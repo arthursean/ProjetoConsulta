@@ -16,7 +16,7 @@ struct Medico
     char nome[MAX_NAME_LENGTH];
     char cpf[12];
     char *procedimentos[MAX_PROCEDIMENTOS];
-    char *diasAtendimento[MAX_DIAS_ATENDIMENTO];
+    int diasAtendimento[MAX_DIAS_ATENDIMENTO];
     int horaEntrada;
     int horaSaida;
 };
@@ -44,9 +44,8 @@ void salvarMedicoNoArquivo(struct Medico medico, int numDiasProcedimento)
 
     for (int i = 0; i < numDiasProcedimento; i++)
     {
-        fprintf(fp, "%s ", medico.diasAtendimento[i]);
+        fprintf(fp, "%d ", medico.diasAtendimento[i]);
     }
-    fprintf(fp, "%d-%d\n", medico.horaEntrada, medico.horaSaida);
     fclose(fp);
 }
 
@@ -77,6 +76,8 @@ void cadastrarMedico()
     printf("4 - Micose\n");
     printf("5 - Varizes\n");
     printf("6 - Consulta\n");
+    int numDiasAtendimento = 0;
+
     if (numProcedimentos > 0 && numProcedimentos < 7)
     {
         for (int i = 0; i < numProcedimentos; i++)
@@ -91,71 +92,42 @@ void cadastrarMedico()
         }
     }
 
-    printf("Você trabalhará quantos dias? ");
-    int numDiasAtendimento = 0;
-    scanf("%d", &numDiasAtendimento);
-    printf("Dias de atendimento disponíveis:\n");
-    printf("1 - Segunda-feira\n");
-    printf("2 - Terca-feira\n");
-    printf("3 - Quarta-feira\n");
-    printf("4 - Quinta-feira\n");
-    printf("5 - Sexta-feira\n");
-    if (numDiasAtendimento > 0)
-    {
-        for (int x = 0; x < numDiasAtendimento; x++)
-        {
-            int dayChoice;
-            printf("Escolha um dia de atendimento (1-5) ou 0 para sair: ");
-            scanf("%d", &dayChoice);
-
-            if (dayChoice == 0)
-            {
-                if (numDiasAtendimento == 0)
-                {
-                    printf("Você não adicionou nenhum dia de atendimento. Cancelando cadastro.\n");
-                    return;
-                }
-                break;
-            }
-            else if (dayChoice >= 1 && dayChoice <= 5)
-            {
-                switch (dayChoice)
-                {
-                case 1:
-                    medico.diasAtendimento[x] = strdup("segunda\0");
-                    break;
-                case 2:
-                    medico.diasAtendimento[x] = strdup("terca\0");
-                    break;
-                case 3:
-                    medico.diasAtendimento[x] = strdup("quarta\0");
-                    break;
-                case 4:
-                    medico.diasAtendimento[x] = strdup("quinta\0");
-                    break;
-                case 5:
-                    medico.diasAtendimento[x] = strdup("sexta\0");
-                    break;
-                }
-            }
-            else
-            {
-                printf("Opção inválida de dia de atendimento!\n");
-            }
-        }
-    }
-    printf("Quando você começará a atender? ");
     while (true)
     {
-        scanf("%d", &medico.horaEntrada);
-        if (medico.horaEntrada >= 7 && medico.horaEntrada <= 14)
+
+        printf("Você trabalhará quantos dias? ");
+        scanf("%d", &numDiasAtendimento);
+        printf("Dias de atendimento disponíveis:\n");
+        printf("1 - Segunda-feira\n");
+        printf("2 - Terca-feira\n");
+        printf("3 - Quarta-feira\n");
+        printf("4 - Quinta-feira\n");
+        printf("5 - Sexta-feira\n");
+        if (numDiasAtendimento > 0)
         {
-            medico.horaSaida = medico.horaEntrada + 6;
+            for (int x = 0; x < numDiasAtendimento; x++)
+            {
+                int dayChoice;
+                printf("Escolha um dia de atendimento (1-5) ou 0 para sair: ");
+                scanf("%d", &dayChoice);
+
+                if (dayChoice >= 1 && dayChoice <= 5)
+                {
+                    medico.diasAtendimento[x] = dayChoice + 1;
+                }
+                else
+                {
+                    printf("Opção inválida de dia de atendimento!\n");
+                    x--;
+                }
+            }
             break;
         }
-        printf("Horário inválido\n");
+        else
+        {
+            printf("Quantidade inválida!\n");
+        }
     }
-
     salvarMedicoNoArquivo(medico, numDiasAtendimento);
     printf("Médico cadastrado com sucesso!\n");
 }
