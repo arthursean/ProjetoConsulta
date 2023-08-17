@@ -90,6 +90,7 @@ void retornaDiaAtual(int *diaAtual, int *mesAtual, int *anoAtual)
     *diaAtual = atoi(dia);
     *mesAtual = mesInt(mes);
     *anoAtual = atoi(ano);
+    printf("%d %d %d", *diaAtual, *mesAtual, *anoAtual);
 }
 int validarData(int dia, int mes, int ano, int escolha, int hora, int min, char nome[])
 {
@@ -101,7 +102,11 @@ int validarData(int dia, int mes, int ano, int escolha, int hora, int min, char 
     {
         return 1;
     }
-    return (retornaDiaDoMes(dia, mes, ano)) || (dia < 1) || (mes < 1 || mes > 12) || (retornaDiaDaSemana(dia, mes, ano) == 6 || retornaDiaDaSemana(dia, mes, ano) == 0) || ehFeriado(dia, mes, ano) || verificaDisponibilidade(dia, mes, ano, escolha, hora, min, nome);
+    int valida = (retornaDiaDoMes(dia, mes, ano)) || (dia < 1) || (mes < 1 || mes > 12) || (retornaDiaDaSemana(dia, mes, ano) == 6 || retornaDiaDaSemana(dia, mes, ano) == 0) || ehFeriado(dia, mes, ano);
+    if (valida == 0)
+    {
+        return verificaDisponibilidade(dia, mes, ano, escolha, hora, min, nome);
+    }
 }
 
 int validarCpf(char cpf[])
@@ -296,6 +301,7 @@ void programaPaciente()
     printf("Agora escolha a data de sua consulta\n");
     escolhaData(&dia, &mes, &ano, escolha, nome); // TODO: COLOCAR A DOENÇA NA ESCOLHA DA DATA E LINKAR COM OS MÉDICOS
     system("clear");
+
     printf("Sr. %s sua consulta está marcada para %02d/%02d/%d\n", nome, dia, mes, ano);
     sleep(2);
     system("clear");

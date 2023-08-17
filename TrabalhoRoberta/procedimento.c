@@ -56,6 +56,11 @@ void selecionaProcedimentosDoMedico(int escolha, char *nome)
 }
 int verificaDisponibilidade(int dia, int mes, int ano, int escolha, int hora, int minuto, char nome[])
 {
+    char name[18];
+    char fileName[50];
+    FILE *file;
+    FILE *fp;
+    int diaAux, mesAux, anoAux, horaInicio, minInicio, horaFinal, minFinal;
     switch (escolha)
     {
     case 1:
@@ -66,11 +71,13 @@ int verificaDisponibilidade(int dia, int mes, int ano, int escolha, int hora, in
                 .tempoMinimoEntreAplicacoes = 15,
                 .tempoMaximoEntreAplicacoes = 30,
                 .duracaoProcedimento = 10};
-        char name[18];
-        FILE *file = fopen("Espinha.txt", "r");
+
+        file = fopen("Espinha.txt", "r");
         fscanf(file, "%s", name);
-        FILE *fp = fopen(strcat(name, ".txt"), "r");
-        int diaAux, mesAux, anoAux, horaInicio, minInicio, horaFinal, minFinal;
+
+        sprintf(fileName, "%s.txt", name);
+        fp = fopen(fileName, "r");
+
         fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
         while (!feof(fp))
         {
@@ -91,7 +98,7 @@ int verificaDisponibilidade(int dia, int mes, int ano, int escolha, int hora, in
         else
         {
             fclose(fp);
-            fp = fopen(name, "a");
+            fp = fopen(fileName, "a");
             fprintf(fp, "\n%d/%d/%d-%d:%d-%d:%d %s %s", dia, mes, ano, hora, minuto, hora, minuto + espinha.duracaoProcedimento, nome, espinha.nomeDoProcedimento);
             return 0;
         }
@@ -103,29 +110,35 @@ int verificaDisponibilidade(int dia, int mes, int ano, int escolha, int hora, in
             .tempoMinimoEntreAplicacoes = 20,
             .tempoMaximoEntreAplicacoes = 25,
             .duracaoProcedimento = 30};
-        fp = fopen("09428867470.txt", "r");
-        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+
+        file = fopen("Hipertrofia.txt", "r");
+        fscanf(file, "%s", name);
+
+        sprintf(fileName, "%s.txt", name);
+        fp = fopen(fileName, "r");
+
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
         while (!feof(fp))
         {
-            if (diaAux == dia && mesAux == mes && anoAux == ano)
+            if (diaAux == dia && mesAux == mes && anoAux == ano && (horaInicio == hora && minInicio <= minuto && minFinal > minuto))
             {
                 return 1;
             }
             else
             {
-                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
             }
         }
-        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
-        if (diaAux == dia && mesAux == mes && anoAux == ano)
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        if (diaAux == dia && mesAux == mes && anoAux == ano && (horaInicio == hora && minInicio <= minuto && minFinal > minuto))
         {
             return 1;
         }
         else
         {
             fclose(fp);
-            fp = fopen("09428867470.txt", "a");
-            fprintf(fp, "\n%d/%d/%d", dia, mes, ano);
+            fp = fopen(fileName, "a");
+            fprintf(fp, "\n%d/%d/%d-%d:%d-%d:%d %s %s", dia, mes, ano, hora, minuto, hora, minuto + hipertrofias.duracaoProcedimento, nome, hipertrofias.nomeDoProcedimento);
             return 0;
         }
         break;
@@ -137,29 +150,34 @@ int verificaDisponibilidade(int dia, int mes, int ano, int escolha, int hora, in
                 .tempoMinimoEntreAplicacoes = 10,
                 .tempoMaximoEntreAplicacoes = 15,
                 .duracaoProcedimento = 20};
-        fp = fopen("09428867470.txt", "r");
-        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        file = fopen("Queloides.txt", "r");
+        fscanf(file, "%s", name);
+
+        sprintf(fileName, "%s.txt", name);
+        fp = fopen(fileName, "r");
+
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
         while (!feof(fp))
         {
-            if (diaAux == dia && mesAux == mes && anoAux == ano)
+            if (diaAux == dia && mesAux == mes && anoAux == ano && (horaInicio == hora && minInicio <= minuto && minFinal > minuto))
             {
                 return 1;
             }
             else
             {
-                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
             }
         }
-        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
-        if (diaAux == dia && mesAux == mes && anoAux == ano)
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        if (diaAux == dia && mesAux == mes && anoAux == ano && (horaInicio == hora && minInicio <= minuto && minFinal > minuto))
         {
             return 1;
         }
         else
         {
             fclose(fp);
-            fp = fopen("09428867470.txt", "a");
-            fprintf(fp, "\n%d/%d/%d", dia, mes, ano);
+            fp = fopen(fileName, "a");
+            fprintf(fp, "\n%d/%d/%d-%d:%d-%d:%d %s %s", dia, mes, ano, hora, minuto, hora, minuto + queloides.duracaoProcedimento, nome, queloides.nomeDoProcedimento);
             return 0;
         }
         break;
@@ -171,29 +189,34 @@ int verificaDisponibilidade(int dia, int mes, int ano, int escolha, int hora, in
                 .tempoMinimoEntreAplicacoes = 3,
                 .tempoMaximoEntreAplicacoes = 5,
                 .duracaoProcedimento = 10};
-        fp = fopen("09428867470.txt", "r");
-        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        file = fopen("Micose.txt", "r");
+        fscanf(file, "%s", name);
+
+        sprintf(fileName, "%s.txt", name);
+        fp = fopen(fileName, "r");
+
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
         while (!feof(fp))
         {
-            if (diaAux == dia && mesAux == mes && anoAux == ano)
+            if (diaAux == dia && mesAux == mes && anoAux == ano && (horaInicio == hora && minInicio <= minuto && minFinal > minuto))
             {
                 return 1;
             }
             else
             {
-                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
             }
         }
-        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
-        if (diaAux == dia && mesAux == mes && anoAux == ano)
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        if (diaAux == dia && mesAux == mes && anoAux == ano && (horaInicio == hora && minInicio <= minuto && minFinal > minuto))
         {
             return 1;
         }
         else
         {
             fclose(fp);
-            fp = fopen("09428867470.txt", "a");
-            fprintf(fp, "\n%d/%d/%d", dia, mes, ano);
+            fp = fopen(fileName, "a");
+            fprintf(fp, "\n%d/%d/%d-%d:%d-%d:%d %s %s", dia, mes, ano, hora, minuto, hora, minuto + micose.duracaoProcedimento, nome, micose.nomeDoProcedimento);
             return 0;
         }
         break;
@@ -205,29 +228,35 @@ int verificaDisponibilidade(int dia, int mes, int ano, int escolha, int hora, in
                 .tempoMinimoEntreAplicacoes = 7,
                 .tempoMaximoEntreAplicacoes = 11,
                 .duracaoProcedimento = 40};
-        fp = fopen("09428867470.txt", "r");
-        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+
+        file = fopen("Varizes.txt", "r");
+        fscanf(file, "%s", name);
+
+        sprintf(fileName, "%s.txt", name);
+        fp = fopen(fileName, "r");
+
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
         while (!feof(fp))
         {
-            if (diaAux == dia && mesAux == mes && anoAux == ano)
+            if (diaAux == dia && mesAux == mes && anoAux == ano && (horaInicio == hora && minInicio <= minuto && minFinal > minuto))
             {
                 return 1;
             }
             else
             {
-                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
             }
         }
-        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
-        if (diaAux == dia && mesAux == mes && anoAux == ano)
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        if (diaAux == dia && mesAux == mes && anoAux == ano && (horaInicio == hora && minInicio <= minuto && minFinal > minuto))
         {
             return 1;
         }
         else
         {
             fclose(fp);
-            fp = fopen("09428867470.txt", "a");
-            fprintf(fp, "\n%d/%d/%d", dia, mes, ano);
+            fp = fopen(fileName, "a");
+            fprintf(fp, "\n%d/%d/%d-%d:%d-%d:%d %s %s", dia, mes, ano, hora, minuto, hora, minuto + varizes.duracaoProcedimento, nome, varizes.nomeDoProcedimento);
             return 0;
         }
         break;
@@ -239,29 +268,35 @@ int verificaDisponibilidade(int dia, int mes, int ano, int escolha, int hora, in
                 .tempoMinimoEntreAplicacoes = 32,
                 .tempoMaximoEntreAplicacoes = 186,
                 .duracaoProcedimento = 60};
-        fp = fopen("09428867470.txt", "r");
-        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+
+        file = fopen("Varizes.txt", "r");
+        fscanf(file, "%s", name);
+        fp = fopen(fileName, "r");
+
+        sprintf(fileName, "%s.txt", name);
+
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
         while (!feof(fp))
         {
-            if (diaAux == dia && mesAux == mes && anoAux == ano)
+            if (diaAux == dia && mesAux == mes && anoAux == ano && (horaInicio == hora && minInicio <= minuto && minFinal > minuto))
             {
                 return 1;
             }
             else
             {
-                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+                fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
             }
         }
-        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
-        if (diaAux == dia && mesAux == mes && anoAux == ano)
+        fscanf(fp, "%d/%d/%d-%d:%d-%d:%d %*s %*s\n", &diaAux, &mesAux, &anoAux, &horaInicio, &minInicio, &horaFinal, &minFinal);
+        if (diaAux == dia && mesAux == mes && anoAux == ano && (horaInicio == hora && minInicio <= minuto && minFinal > minuto))
         {
             return 1;
         }
         else
         {
             fclose(fp);
-            fp = fopen("09428867470.txt", "a");
-            fprintf(fp, "\n%d/%d/%d", dia, mes, ano);
+            fp = fopen(fileName, "a");
+            fprintf(fp, "\n%d/%d/%d-%d:%d-%d:%d %s %s", dia, mes, ano, hora, minuto, hora, minuto + consulta.duracaoProcedimento, nome, consulta.nomeDoProcedimento);
             return 0;
         }
         break;
