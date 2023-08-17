@@ -5,6 +5,7 @@
 
 void programaMedico();
 int verificaDisponibilidade();
+int encontrarProximoDiaUtil();
 int ehFeriado(int dia, int mes, int ano)
 {
     if (ano == 2023 || ano == 2024)
@@ -90,7 +91,7 @@ void retornaDiaAtual(int *diaAtual, int *mesAtual, int *anoAtual)
     *diaAtual = atoi(dia);
     *mesAtual = mesInt(mes);
     *anoAtual = atoi(ano);
-    printf("%d %d %d", *diaAtual, *mesAtual, *anoAtual);
+    // printf("%d %d %d", *diaAtual, *mesAtual, *anoAtual);
 }
 int validarData(int dia, int mes, int ano, int escolha, int hora, int min, char nome[])
 {
@@ -138,9 +139,84 @@ int validarCpf(char cpf[])
     }
     return 1;
 }
+
+int ehDiaUtil(int diaSemana)
+{
+    if (diaSemana >= 1 && diaSemana <= 5)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int encontrarProximoDiaUtil(int dia, int mes, int ano)
+{
+    int diaSemana = retornaDiaDaSemana(dia, mes, ano);
+
+    while (!ehDiaUtil(diaSemana) || ehFeriado(dia, mes, ano))
+    {
+        if (retornaDiaDoMes(dia, mes, ano))
+        {
+            dia = 1;
+            if (mes < 12)
+            {
+                mes++;
+            }
+            else
+            {
+                mes = 1;
+                ano++;
+            }
+        }
+        else
+        {
+            dia++;
+        }
+        diaSemana = (diaSemana + 1) % 7;
+    }
+
+    return dia;
+}
+
+typedef struct
+{
+    char nomeDoProcedimento[50];
+    int numVezes;
+    int tempoMinimoEntreAplicacoes;
+    int tempoMaximoEntreAplicacoes;
+    int duracaoProcedimento;
+} Procedimento;
+
 int escolhaData(int *dia, int *mes, int *ano, int escolha, char nome[])
 {
+    Procedimento procedimentos[] = {
+        {"Espinhas", 10, 15, 22},
+        {"Hipertrofias", 15, 20, 25},
+        {"Queloides", 20, 10, 15},
+        {"Micose", 10, 3, 5},
+        {"Varizes", 30, 7, 11},
+        {"Consulta", 1, 32, 186}};
+
+    int intervaloMin = procedimentos[escolha - 1].tempoMinimoEntreAplicacoes;
+    int intervaloMax = procedimentos[escolha - 1].tempoMaximoEntreAplicacoes;
+
+    printf("Digite o intervalo desejado entre as consultas (em dias) entre %d e %d: ", intervaloMin, intervaloMax);
+    int intervaloEscolhido;
+    while (1)
+    {
+        scanf("%d", &intervaloEscolhido);
+        if (intervaloEscolhido >= intervaloMin && intervaloEscolhido <= intervaloMax)
+        {
+            break;
+        }
+        printf("Intervalo inválido! Digite novamente: ");
+    }
+
     int hora, min;
+
     while (1)
     {
         printf("Dia: ");
@@ -247,17 +323,54 @@ int escolhaData(int *dia, int *mes, int *ano, int escolha, char nome[])
                     *dia += 1;
                 }
             }
-            return 0;
+            break;
         }
+        int proximoDia = *dia;
+        int proximoMes = *mes;
+        int proximoAno = *ano;
         if (!validarData(*dia, *mes, *ano, escolha, hora, min, nome))
         {
             printf("\n");
+            for (int i = 1; i < procedimentos[escolha - 1].numVezes; i++)
+            {
+                proximoDia += intervaloEscolhido;
+
+                if (proximoDia > 30 && (proximoMes == 4 || proximoMes == 6 || proximoMes == 9 || proximoMes == 11))
+                {
+                    proximoDia = proximoDia - 30;
+                    proximoMes++;
+                }
+                else if ((proximoMes == 2 && proximoDia > 28 && !ehBissexto(proximoAno)) || (proximoMes == 2 && proximoDia > 29 && ehBissexto(proximoAno)))
+                {
+                    proximoDia = proximoDia - 28;
+                    proximoMes++;
+                }
+                else if (proximoDia > 31)
+                {
+                    proximoDia = proximoDia - 31;
+                    proximoMes++;
+                }
+
+                if (proximoMes > 12)
+                {
+                    proximoMes = proximoMes - 12;
+                    proximoAno++;
+                }
+
+                proximoDia = encontrarProximoDiaUtil(proximoDia, proximoMes, proximoAno);
+
+                if (!validarData(proximoDia, proximoMes, proximoAno, escolha, hora, min, nome))
+                {
+                    printf("Proxima Consulta para %02d/%02d/%d às %02d:%02d\n", proximoDia, proximoMes, proximoAno, hora, min);
+                }
+            }
             return 0;
         }
         printf("Data inválida!\n");
         sleep(2);
         system("clear");
     }
+
     return 1;
 }
 void programaPaciente()
@@ -279,8 +392,7 @@ void programaPaciente()
         }
         printf("Seu CPF é inválido, digite novamente!\n");
     }
-    sleep(1);
-    system("clear");
+
     printf("Olá, Sr(a). %s. Você gostaria de realizar qual procedimento?\n", nome);
     int escolha;
     int flag = 0;
@@ -295,16 +407,11 @@ void programaPaciente()
             flag = 0;
             printf("Opção inválida!\n");
         }
-        sleep(1);
-        system("clear");
     }
     printf("Agora escolha a data de sua consulta\n");
     escolhaData(&dia, &mes, &ano, escolha, nome); // TODO: COLOCAR A DOENÇA NA ESCOLHA DA DATA E LINKAR COM OS MÉDICOS
-    system("clear");
 
     printf("Sr. %s sua consulta está marcada para %02d/%02d/%d\n", nome, dia, mes, ano);
-    sleep(2);
-    system("clear");
 }
 int main()
 {
@@ -312,7 +419,6 @@ int main()
     printf("Bem vindo à clínica Boa Estética!\n");
     printf("Você gostaria de:\n1 - Marcar consulta\n2 - Cadastrar como médico\n3 - Sair\n");
     scanf("%d", &escolha);
-    system("clear");
     getchar();
     if (escolha == 1)
     {

@@ -52,7 +52,7 @@ void cadastrarMedico()
         printf("CPF inválido. Digite novamente\n");
     }
 
-    printf("Quantos procedimentos você realizará? ");
+    printf("Quantos procedimentos você realizará? (1-6)");
     int numProcedimentos = 0;
     scanf("%d", &numProcedimentos);
     printf("Procedimentos disponíveis:\n");
